@@ -1,14 +1,16 @@
 from asyncio.windows_events import NULL
 from collections import defaultdict
 
-import xml.etree.ElementTree as ET
+# Safe xml parser
+from defusedxml.ElementTree import fromstring
 import base64
 import json
 
 import re
+
+import SiteMapper
 # ************************************************************* #
-# Site Mapper Functions - By Jackson Thellin                    |
-#                                                               |
+# Site Mapper Functions - By Jackson Thellin                    |                                        |
 # ************************************************************* #
 
 # Global variables
@@ -19,15 +21,14 @@ hostname = ""
 # Define the request class and functions.                       |
 # ------------------------------------------------------------- #
 
-# Request class - Each request has a depth in the tree, a host, a method, a path, and optional parameters
+# Request class - Each request has a depth in the tree, a host, a method, a path, optional parameters/content-type, and the encoded request
 class Request:
   def __init__(request, host, method, path, parameters={}, encoded_request="", content_type=[]):
     global hostname
     request.host = host
     request.method = method
     request.parameters = parameters
-    # Check if there is extra forward slash at the end of path and remove if true
-    if(path.endswith('/') and path != "/"):
+    if(path.endswith('/') and path != "/"):    # Check if there is extra forward slash at the end of path and remove if true
        request.path = path[:-1]
     else:
        request.path = path
@@ -73,7 +74,7 @@ def getDepth(path):
       depth = path.count("/")
     return depth
 
-# GET Parameters
+# GET Parameters 
 def stripURLParams(path,parameters):
    path_and_parameters = path.split("?")
    path = path_and_parameters[0]
@@ -86,8 +87,7 @@ def stripURLParams(path,parameters):
 
 # POST Parameters - Use content-type to deterimine how to parse the body
 def stripPOSTParams(decoded_request,parameters,ctype):
-    # Check if body exists
-    requestSplit = decoded_request.split('\n')
+    requestSplit = decoded_request.split('\n')                  # Check if body exists
     if(len(requestSplit)>1 or decoded_request.find("Content-Type: multipart/form-data")>0):
         if(decoded_request.find("Content-Type: application/x-www-form-urlencoded")>0):
             ctype.append("application/x-www-form-urlencoded")
@@ -132,20 +132,19 @@ def simpleForm(decoded_request, parameters):
 # XML body
 def xmlForm(decoded_request, parameters):
     requestSplit = decoded_request.split('\n')
-    root = ET.fromstring(requestSplit[len(requestSplit)-1])
+    root = fromstring(requestSplit[len(requestSplit)-1])
     if(len(root) == 0):
        parameters.append(root.tag)
     else:
         for parameter in root:
-            # Check if the body uses SOAP web services. Will have parameters nested in api functions
-            parameters.append(parameter.tag)
+            parameters.append(parameter.tag)             # Check if the body uses SOAP web services. Will have parameters nested in api functions
+
           
 
 # JSON body
 def jsonForm(decoded_request, parameters):
     requestSplit = decoded_request.split('\n')
     jsonBody = json.loads(requestSplit[len(requestSplit)-1])
-    
     extractJson(jsonBody, parameters)
 
 # Helper function to recursively iterate through json structure
@@ -158,25 +157,22 @@ def extractJson(jsonBody, parameters):
         for nestedJson in jsonBody:
             extractJson(nestedJson,parameters)      
  
+# Ensure there are no duplicate requests with the same path, method, and parameters. 
 def removeDuplicates(requestList):
-  # Use a set to track unique requests based on path, parameters, and method. 
-  # Add request tuples to the set if they are not found and append them to the list. Return this new list to update requestList
-  unique_requests_set = set()
-  unique_requests_list = []
+  unique_requests_set = set()       # Use a set to track unique requests based on path, parameters, and method.
+  unique_requests_list = []         # Add request tuples to the set if they are not found and append them to the list. Return this new list to update requestList
 
   for request in requestList:
-    # Convert request to a tuple to use it as a set element
-    request_tuple = (request.path, tuple(request.parameters), request.method)
+    request_tuple = (request.path, tuple(request.parameters), request.method)    # Convert request to a tuple to use it as a set element
 
-    # Check if the request tuple is not in the set 
-    if request_tuple not in unique_requests_set:
+    if request_tuple not in unique_requests_set:                                 # Check if the request tuple is not in the set 
         unique_requests_set.add(request_tuple)
         unique_requests_list.append(request)
   return unique_requests_list
 
+# Combine parameters between requests with the same method and path
 def combineParams(requestList):
-  # Use a set to track unique parameters based on request method and path
-  unique_params = dict()
+  unique_params = dict()                            # Use a set to track unique parameters based on request method and path
   unique_requests_list = []
   unique_content = dict()
 
@@ -242,7 +238,7 @@ def removeRequestsWithoutParameters(requestList):
          requests_with_parameters.append(request)         
     return requests_with_parameters
 
-# Grab information from each xml element representing a request. Create a new request object with the host, path, method, content-type, and parameters
+# Grab information from each xml element representing a request. Create a new request object with the host, path, method, content-type, parameters, and encoded request
 def parseRequests(root):
     global hasRoot
     requestList = []
@@ -257,24 +253,22 @@ def parseRequests(root):
               host = property.text 
            if(property.tag == "method"):
               method = property.text
-              if(property.text != "GET"):  # Any method other than GET will be checked for a body
+              if(property.text != "GET"):                   # Any method other than GET will be checked for a body
                  hasBody = True
               else:
                  hasBody = False
            if(property.tag == "path"):
               path = property.text
-              if(path == "/"):
+              if(path == "/"):                              # Check if site map has root element - create one later if not
                   hasRoot = True
-              # Fetch any URL parameters and strip from path
-              if "?" in path:
+              if "?" in path:                               # Fetch any URL parameters and strip from path
                 path,parameters = stripURLParams(path,parameters)
 
-           # Decode request body and pull out parameters
-           if(property.tag == "request"):
+           if(property.tag == "request"):                    # Decode request body and pull out parameters
               encoded_request = property.text
               if(hasBody == True):
                 try:
-                    decoded_request = base64.b64decode(encoded_request).decode('utf-8')      # Try utf-8 decode for better readability before doing regular base64 decode
+                    decoded_request = base64.b64decode(encoded_request).decode('utf-8')     # Try utf-8 decode for better readability before doing regular base64 decode
                     stripPOSTParams(decoded_request,parameters,content_type)
                 except:
                     try:
@@ -288,18 +282,21 @@ def parseRequests(root):
                 requestList.append(Request(host,method,path,parameters,encoded_request, content_type)) 
     return requestList            
 
+
+# ------------------------------------------------------------------------------------------------------------ #
+# Funcitons for creating site map structure after request list has been populated and parsed                   |
+# ------------------------------------------------------------------------------------------------------------ #
+
 # Check for suitable parent requests to create an edge between. A suitable parent's path can be found at the start of the corresponding child's path 
 def find_parent(node, depth, nodes):
         for current_depth in range(depth, -1, -1):
             parent_nodes = nodes[current_depth-1]
             for parent_node in parent_nodes:
-                #Extract paths and parent method
-                child_path = node["path"].strip('"')
+                child_path = node["path"].strip('"')                #Extract paths and parent method
                 parent_path = parent_node["path"].strip('"')
                 parent_method = parent_node["method"].strip('"')
 
-                # Split parent and child path by /. Compare each subpath according to the current depth that is beng checked
-                child_paths = child_path.split("/")[1:]
+                child_paths = child_path.split("/")[1:]              # Split parent and child path by /. Compare each subpath according to the current depth that is beng checked
                 parent_paths = parent_path.split("/")[1:]
 
                 child_path_to_compare = child_paths[:current_depth-1]
@@ -311,22 +308,16 @@ def find_parent(node, depth, nodes):
 # Create node function
 def createNode(request):
     color = ""
-    shape = ""
     if request.method == "GET":
         color = "#ADD8E6"  # Blue for GET
-        shape = "rect"
     elif request.method == "POST":
         color = "#beffb8"  # Green for POST 
-        shape = 'circle'
     elif request.method == "DELETE":
         color = "#FF6961"  # Red for DELETE
-        shape = 'circle'
     elif (request.method == "PUT" or request.method == "PATCH"):
         color = "#FDFD96"  # Yellow for PUT and PATCH
-        shape = 'circle'
     else:
-        color = "#d3d3d3"
-        shape = 'rect'           
+        color = "#d3d3d3"        
 
     return {"label":f"{request.method} {request.path}",
             "path" : request.path,
@@ -336,7 +327,6 @@ def createNode(request):
             "strokecolor": "#000000",
             "depth": request.depth,
             "value": 30,
-            "shape": shape,
             "content_type": request.content_type,
             "encoded_request":request.encoded,
             "parameters":request.parameters,
@@ -344,32 +334,3 @@ def createNode(request):
             "vulnerabilities": [],        
             "children":[]
 }
-
-# Take in request list and return a pydot graph
-def createSiteMap(requestList):
-    nodes = defaultdict(list)
-
-    if(len(requestList[0].host)>27):
-       hostname = requestList[0].host[:27] + "..."
-    # Check for root node, if none exist then create one
-    if(hasRoot == False):
-        print("Creating root...\n")
-        requestList.append(Request(requestList[0].host,hostname,'/'))
-    
-    # Sort request list according to depth
-    requestList.sort(key=lambda r: r.depth)
-
-    for request in requestList:
-        newJSONNode = createNode(request)
-
-        nodes[request.depth].append(newJSONNode)
-        if request.depth > 0:
-            # Find a suitable parent node for the current node
-            try:
-                suitable_parent = find_parent(newJSONNode, request.depth, nodes)
-                suitable_parent["children"].append(newJSONNode)
-            except:
-               print("Could not find a suitable parent")
-
-    # Return root node
-    return nodes[0]

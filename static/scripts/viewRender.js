@@ -69,6 +69,7 @@ function update(source) {
     return "translate(" + source.x0 + "," + source.y0 + ")";
     })
     .on("click", function(request_node) {            // Update selected request on left click
+        requestSelected = true;
         click(request_node);
     })                                              
     .on("contextmenu", function (request_node) {    // Set selected request and call custom context menu on right click. 
@@ -145,21 +146,48 @@ function update(source) {
     return "translate(" + request_node.x + "," + request_node.y + ")";
     });
 
-    nodeUpdate.select("rect")   // Update with current request colors
+    nodeUpdate.select("rect")                           // Update with current request colors
     .attr("width", rectW)
     .attr("height", rectH)
-    .attr("stroke", function(request_node){
-        return request_node.strokecolor;
+    .attr("stroke", function(request_node){ 
+            return request_node.strokecolor;
     })
-    .attr("stroke-width", 1)
+    .attr("stroke-width", function(request_node){
+        if(selectedRequest==request_node){                      //Make border thicker on selected request
+            return 2;
+        }else{
+            return 1;
+        }
+    })
     .style("fill", function (request_node) {
-    return request_node.fillcolor;
+        if(selectedRequest==request_node){
+            if(request_node.fillcolor=="#adeaff"){              //Saturate selected request
+                return "#0db9f2"
+            }else if(request_node.fillcolor=="#9cff99") {
+                return "#07cc00"
+            }else if(request_node.fillcolor=="#ffadad") {
+                return "#ff3333"
+            }else if(request_node.fillcolor=="#fffd99") {
+                return "#ccc500"
+            }else{
+                return "#6b6b6b"
+            } 
+        }else{
+            return request_node.fillcolor;
+        }
     });
 
     nodeUpdate.select("text")
-    .style("fill-opacity", 1);
+    .style("fill-opacity", 1)
+    .style("fill", function(request_node){
+        if(selectedRequest==request_node){
+            return "white";
+        }else{
+            return "black";
+        }
+    })
 
-    nodeUpdate.select("text.vulnerability")  //Number of vulnerabilities text
+    nodeUpdate.select("text.vulnerability")             //Number of vulnerabilities text
     .attr("text-anchor", "start")
     .attr("x", function(request_node){
         if(request_node.parameters.length > 0){         //Shift to the right corner if there are no parameters
@@ -173,7 +201,7 @@ function update(source) {
     .style("fill", "white")
     .style("white-space", "pre")
     .text(function (request_node) {
-        if(request_node.vulnerabilities.length>0){     //Center based on number of digits
+        if(request_node.vulnerabilities.length>0){      //Center based on number of digits
             if(request_node.vulnerabilities.length<10){
                 var string = " " + request_node.vulnerabilities.length.toString();
                 return string;

@@ -309,15 +309,15 @@ def find_parent(node, depth, nodes):
 def createNode(request):
     color = ""
     if request.method == "GET":
-        color = "#ADD8E6"  # Blue for GET
+        color = "#adeaff"  # Blue for GET
     elif request.method == "POST":
-        color = "#beffb8"  # Green for POST 
+        color = "#9cff99"  # Green for POST 
     elif request.method == "DELETE":
-        color = "#FF6961"  # Red for DELETE
+        color = "#ffadad"  # Red for DELETE
     elif (request.method == "PUT" or request.method == "PATCH"):
-        color = "#FDFD96"  # Yellow for PUT and PATCH
+        color = "#fffd99"  # Yellow for PUT and PATCH
     else:
-        color = "#d3d3d3"        
+        color = "#c9c9c9"        
 
     return {"label":f"{request.method} {request.path}",
             "path" : request.path,

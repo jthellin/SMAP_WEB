@@ -396,7 +396,7 @@ label {
     resize:none;
     font-weight: bold;
     overflow:auto;
-    width: 280px;
+    width: 270px;
     outline: 0;
     border: 1px outset gray;
     background-color: white;
@@ -404,7 +404,7 @@ label {
 }
 .description{
     resize:vertical;
-    width: 280px;
+    width: 270px;
     outline: 0;
     margin-left: 35px;
 

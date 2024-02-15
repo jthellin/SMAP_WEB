@@ -77,6 +77,7 @@ function click(request_node) {
     }else{
         document.getElementById('hasVulns').style.display = "none";
     }
+    update(request_node);
 } 
 
 // Open a popup window with the decoded request. Uses safe innerText to add request to newly created div

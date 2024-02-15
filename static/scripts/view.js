@@ -218,7 +218,7 @@ function update(source) {
     var nodeExit = node.exit().transition()
     .duration(duration)
     .attr("transform", function () {
-    return "translate(" + source.x0 + "," + source.y0 + ")";
+    return "translate(" + source.x + "," + source.y + ")";
     })
     .remove();
 
@@ -551,70 +551,6 @@ colors.forEach(function(color) {
     });
     update(graphRoot);
 });
-    
-collapseExpand.addEventListener("click", function() {
-    var modifyRequest = selectedRequest
-    expand_or_collapse(modifyRequest);
-});
-
-removeRequest.addEventListener("click", function() {
-    // Recursively remove the node and its children
-    function removeNode(node) {
-        if (node === selectedRequest) {
-            return null; // Skip this node
-        } else {
-            if (node.children) {
-                // Recursively remove children
-                node.children = node.children.map(removeNode).filter(function(child) {
-                    return child !== null;
-                });
-            }
-            return node;
-        }
-    }
-    // Call the removeNode function to remove the node from the graphRoot
-    graphRoot = removeNode(graphRoot);
-
-    document.getElementById('selectedRequest').innerText = "";
-    document.getElementById('notesLabel').innerText = "";
-    document.getElementById('notes').style.display = "none";
-    document.getElementById('notes').value  = "";
-    document.getElementById('content_type').innerText = "";
-    document.getElementById('selectedParams').innerText = "";
-    document.getElementById('parameterLabel').innerText = "";
-    document.getElementById('contentLabel').innerText = "";
-
-    update(graphRoot);
-});
-
-
-function openPopup(content) {
-    // Open a popup window with the decoded request
-    var popup = window.open("", "popupWindow", "width=600,height=400");
-    var newDiv = popup.document.createElement("div");
-    newDiv.innerText = content;
-    popup.document.body.appendChild(newDiv);
-}
-
-//Redraw for zoom
-function redraw() {
-    //console.log("here", d3.event.translate, d3.event.scale);
-    svg.attr("transform",
-    "translate(" + d3.event.translate + ")"
-    + " scale(" + d3.event.scale + ")");
-}
-
-function expand_or_collapse(request_node){
-    if (request_node.children) {
-        request_node._children = request_node.children;
-        request_node.children = null;
-        } else {
-        request_node.children = request_node._children;
-        request_node._children = null;
-        }
-        update(graphRoot);
-}
-
 
 expandAll.addEventListener("click", function() {
     // Traverse the tree and expand collapsed nodes, which have a populated _children 
@@ -644,6 +580,66 @@ collapseAll.addEventListener("click", function() {
     collapseExpanded(graphRoot)
 });
 
+function expand_or_collapse(request_node){
+    if (request_node.children) {
+        request_node._children = request_node.children;
+        request_node.children = null;
+        } else {
+        request_node.children = request_node._children;
+        request_node._children = null;
+        }
+        update(request_node);
+}
+
+collapseExpand.addEventListener("click", function() {
+    var modifyRequest = selectedRequest
+    expand_or_collapse(modifyRequest);
+});
+
+removeRequest.addEventListener("click", function() {
+    // Recursively remove the node and its children
+    function removeNode(node) {
+        if (node === selectedRequest) {
+            return null; // Skip this node
+        } else {
+            if (node.children) {
+                // Recursively remove children
+                node.children = node.children.map(removeNode).filter(function(child) {
+                    return child !== null;
+                });
+            }
+            return node;
+        }
+    }
+    // Call the removeNode function to remove the node from the graphRoot
+    removeNode(graphRoot);
+
+    document.getElementById('selectedRequest').innerText = "";
+    document.getElementById('notesLabel').innerText = "";
+    document.getElementById('notes').style.display = "none";
+    document.getElementById('notes').value  = "";
+    document.getElementById('content_type').innerText = "";
+    document.getElementById('selectedParams').innerText = "";
+    document.getElementById('parameterLabel').innerText = "";
+    document.getElementById('contentLabel').innerText = "";
+});
+
+
+function openPopup(content) {
+    // Open a popup window with the decoded request
+    var popup = window.open("", "popupWindow", "width=600,height=400");
+    var newDiv = popup.document.createElement("div");
+    newDiv.innerText = content;
+    popup.document.body.appendChild(newDiv);
+}
+
+//Redraw for zoom
+function redraw() {
+    //console.log("here", d3.event.translate, d3.event.scale);
+    svg.attr("transform",
+    "translate(" + d3.event.translate + ")"
+    + " scale(" + d3.event.scale + ")");
+}
 
 // Save as SVG function
 saveSVG.addEventListener("click", function() {

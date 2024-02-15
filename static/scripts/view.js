@@ -7,6 +7,7 @@ var trimmedData = graphRoot.slice(2, -2);
 var graphRoot = JSON.parse(trimmedData);
 var selectedRequest;
 var requestSelected = false;
+var removingRequest = false;
 
 // Define render area and margins
 var margin = {
@@ -217,8 +218,14 @@ function update(source) {
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
     .duration(duration)
+    .style("opacity", function () {
+        if(removingRequest){
+            removingRequest = false;
+            return 0;
+        }
+    })
     .attr("transform", function () {
-    return "translate(" + source.x + "," + source.y + ")";
+        return "translate(" + source.x + "," + source.y + ")";
     })
     .remove();
 
@@ -568,6 +575,7 @@ expandAll.addEventListener("click", function() {
 
 collapseAll.addEventListener("click", function() {
     // Traverse the tree and expand collapsed nodes, which have a populated _children 
+    selectedRequest = null;
     function collapseExpanded(node){
         if(node._children){
             (node._children).forEach(collapseExpanded);
@@ -612,6 +620,7 @@ removeRequest.addEventListener("click", function() {
         }
     }
     // Call the removeNode function to remove the node from the graphRoot
+    removingRequest = true;
     removeNode(graphRoot);
 
     document.getElementById('selectedRequest').innerText = "";

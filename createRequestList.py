@@ -9,7 +9,8 @@ import base64
 from asyncio.windows_events import NULL
 from collections import defaultdict
 
-import xml.etree.ElementTree as ET
+# Safe xml parser
+from defusedxml.ElementTree import fromstring
 
 from flask import Flask, abort, flash, request, redirect, url_for, render_template
 
@@ -31,9 +32,9 @@ version = ""
 def createRequestList(file_contents, filename):
     global date
     global version
-    # Parse the XML file and use the ElementTree library to grab the root tag
     try:
-        root = ET.fromstring(file_contents)
+        # Parse the XML file and grab the root tag
+        root = fromstring(file_contents)
     except:
         flash("There was an issue parsing this file: " + escape(filename))
    

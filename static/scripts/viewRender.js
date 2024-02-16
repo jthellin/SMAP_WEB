@@ -252,7 +252,6 @@ function update(source) {
     .duration(duration)
     .style("opacity", function () {           // If removing the request, fade out instead of moving towards parent 
         if(removingRequest){
-            removingRequest = false;
             return 0;
         }
     })

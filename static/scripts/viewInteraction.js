@@ -180,6 +180,7 @@ function attachColor() {
 
 //Toggle expand/collapse funciton
 function expand_or_collapse(request_node){
+    removingRequest = false;
     if (request_node.children) {
         request_node._children = request_node.children;
         request_node.children = null;
@@ -188,6 +189,21 @@ function expand_or_collapse(request_node){
         request_node._children = null;
         }
         update(request_node);
+}
+
+// Function to remove unwanted attributes recursively from a JSON object
+function removeAttributes(obj, attributesToRemove) {
+    if (obj && typeof obj === 'object') {
+        if (Array.isArray(obj)) {
+            obj.forEach(item => removeAttributes(item, attributesToRemove));
+        } else {
+            // Remove specified attributes
+            attributesToRemove.forEach(attr => delete obj[attr]);
+            for (let key in obj) {
+                removeAttributes(obj[key], attributesToRemove);
+            }
+        }
+    }
 }
 //---------------/
 // Event Handlers
@@ -269,7 +285,7 @@ openRequest.addEventListener("click", function() {
 removeRequest.addEventListener("click", function() {
     function removeNode(node) {
         if (node === selectedRequest) {
-            return null; // Skip this node
+            return null; // Skip this node       
         } else {
             if (node.children) {
                 // Recursively remove children
@@ -402,25 +418,8 @@ savePNG.addEventListener("click", function() {
     };
 });
 
-// Function to remove unwanted attributes recursively from a JSON object
-function removeAttributes(obj, attributesToRemove) {
-    if (obj && typeof obj === 'object') {
-        if (Array.isArray(obj)) {
-            obj.forEach(item => removeAttributes(item, attributesToRemove));
-        } else {
-            // Remove specified attributes
-            attributesToRemove.forEach(attr => delete obj[attr]);
-            for (let key in obj) {
-                removeAttributes(obj[key], attributesToRemove);
-            }
-        }
-    }
-}
-
 // Attributes to remove
 const attributesToRemove = ['parent', 'x', 'y', 'id', 'x0', 'y0'];
-
-
 //Save SMAP file
 saveSMAP.addEventListener("click", function() {
     var downloadRoot = graphRoot;

@@ -2,7 +2,6 @@
 //Functions and event handlers for interaction with graph
 //****************************************************** */
 
-
 //Global Variables/Html elements
 
 //Request context menu for collapsing/expanding, coloring, removing, and other edits
@@ -422,18 +421,18 @@ function removeAttributes(obj, attributesToRemove) {
 const attributesToRemove = ['parent', 'x', 'y', 'id', 'x0', 'y0'];
 
 
-//Save SMAP
+//Save SMAP file
 saveSMAP.addEventListener("click", function() {
-    var downLoadRoot = graphRoot;
+    var downloadRoot = graphRoot;
     // Remove specified attributes from the JSON object
-    removeAttributes(downLoadRoot, attributesToRemove);
+    removeAttributes(downloadRoot, attributesToRemove);
     //Add host, creation date, and version
-    downLoadRoot.host = host;
-    downLoadRoot.date = creationDate;
-    downLoadRoot.version = creationVersion;
+    downloadRoot.host = host;
+    downloadRoot.date = creationDate;
+    downloadRoot.version = creationVersion;
 
     var downloadLink = document.createElement("a");
-    var file = new Blob([JSON.stringify(downLoadRoot)], {type: 'text/plain'});
+    var file = new Blob([JSON.stringify(downloadRoot)], {type: 'text/plain'});
     downloadLink.href = URL.createObjectURL(file);
     downloadLink.download = host+'.smap';
     downloadLink.click();

@@ -36,7 +36,7 @@ def upload():
             if file_ext not in app.config['UPLOAD_EXTENSIONS']:
                 abort(400)
             else:                                                       # Passed initial file upload checks. 
-                if(file_ext == '.smap'):               
+                if(file_ext == '.smap'):                                # Parse as SMAP file
                     jsonRoot = json.loads(file_contents)
                     hostname = jsonRoot.pop('host', None)
                     creationDate = jsonRoot.pop('date', None)
@@ -44,7 +44,7 @@ def upload():
                     isSMAP = 1
                     data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":isSMAP} # Format data to pass into template 
                     return render_template('view.html', data=data)  
-                else:
+                else:                                                                                       # Parse as Burp Suite file
                     requestList = SiteMapper.createRequestList(file_contents, file.filename)         
                     graphRoot = SiteMapper.createSiteMap(requestList)
                     jsonRoot = json.dumps(graphRoot)                                                        # Convert graph into json format

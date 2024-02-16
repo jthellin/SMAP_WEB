@@ -240,6 +240,7 @@ d3.select("body").on("click", function(){
     if(selectedRequest){                                           //Save vulnerabilities in current request
         saveVulns(selectedRequest);
     }
+    requestSelected = false;
 });
 
 // Loop through each color in request context menu and add a click event listener
@@ -401,6 +402,43 @@ savePNG.addEventListener("click", function() {
         document.body.removeChild(downloadLink);        // Remove the link from the document body
     };
 });
+
+// Function to remove unwanted attributes recursively from a JSON object
+function removeAttributes(obj, attributesToRemove) {
+    if (obj && typeof obj === 'object') {
+        if (Array.isArray(obj)) {
+            obj.forEach(item => removeAttributes(item, attributesToRemove));
+        } else {
+            // Remove specified attributes
+            attributesToRemove.forEach(attr => delete obj[attr]);
+            for (let key in obj) {
+                removeAttributes(obj[key], attributesToRemove);
+            }
+        }
+    }
+}
+
+// Attributes to remove
+const attributesToRemove = ['parent', 'x', 'y', 'id', 'x0', 'y0'];
+
+
+//Save SMAP
+saveSMAP.addEventListener("click", function() {
+    var downLoadRoot = graphRoot;
+    // Remove specified attributes from the JSON object
+    removeAttributes(downLoadRoot, attributesToRemove);
+    //Add host, creation date, and version
+    downLoadRoot.host = host;
+    downLoadRoot.date = creationDate;
+    downLoadRoot.version = creationVersion;
+
+    var downloadLink = document.createElement("a");
+    var file = new Blob([JSON.stringify(downLoadRoot)], {type: 'text/plain'});
+    downloadLink.href = URL.createObjectURL(file);
+    downloadLink.download = host+'.smap';
+    downloadLink.click();
+});
+
 
 // Update the visualization
 update(graphRoot);

@@ -3,9 +3,14 @@
 // Tree graph template created by Augustus Yuan - https://codepen.io/augbog/pen/LEXZKK
 //************************************************************************************ */
 
-// Parse root into correct json format
-var trimmedData = graphRoot.slice(2, -2);
-var graphRoot = JSON.parse(trimmedData);
+//Check if a burp suite or smap file was uploaded
+if(isSMAP==0){
+    var trimmedData = graphRoot.slice(2, -2); // Parse root into correct json format
+    var graphRoot = JSON.parse(trimmedData);
+}else{
+    var trimmedData = graphRoot.replace(/\\/g, ''); // Parse root into correct json format
+    var graphRoot = JSON.parse(trimmedData);
+}
 var selectedRequest;
 var requestSelected = false;
 var removingRequest = false;
@@ -162,13 +167,13 @@ function update(source) {
     .style("fill", function (request_node) {
         if(selectedRequest==request_node){
             if(request_node.fillcolor=="#adeaff"){              //Saturate selected request
-                return "#0db9f2"
+                return "#3ac4f2"
             }else if(request_node.fillcolor=="#9cff99") {
-                return "#07cc00"
+                return "#58d654"
             }else if(request_node.fillcolor=="#ffadad") {
                 return "#ff3333"
             }else if(request_node.fillcolor=="#fffd99") {
-                return "#ccc500"
+                return "#bab514"
             }else{
                 return "#6b6b6b"
             } 

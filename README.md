@@ -11,10 +11,6 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
-Install node.js
-```
-https://nodejs.org/en/download/
-```
 Start the application. The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000)
 ```
 flask --app app run

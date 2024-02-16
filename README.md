@@ -9,7 +9,7 @@ git clone https://github.com/jthellin/SMAP_WEB
 ```
 Install dependencies
 ```
-pip install -r requirments.txt
+pip install -r requirements.txt
 ```
 Install node.js
 ```

@@ -19,7 +19,7 @@ Start the application. The application can be accessed at local host port 5000 u
 ```
 flask --app app run
 ```
-##Running the App
+## Running the App
 Activate the virtual environment
 ```
 .venv/Scripts/activate

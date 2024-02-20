@@ -9,11 +9,7 @@ git clone https://github.com/jthellin/SMAP_WEB
 ```
 Install dependencies
 ```
-pip install -r requirments.txt
-```
-Install node.js
-```
-https://nodejs.org/en/download/
+pip install -r requirements.txt
 ```
 Start the application. The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000)
 ```

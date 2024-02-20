@@ -44,7 +44,9 @@ def upload():
                     isSMAP = 1
                     data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":isSMAP} # Format data to pass into template 
                     return render_template('view.html', data=data)  
-                else:                                                                                       # Parse as Burp Suite file
+                else:                     
+                    SiteMapperFunctions.hostname = ""                      #Reset global variables for site map generation
+                    SiteMapperFunctions.hasRoot = False                                                                  # Parse as Burp Suite file
                     requestList = SiteMapper.createRequestList(file_contents, file.filename)         
                     graphRoot = SiteMapper.createSiteMap(requestList)
                     jsonRoot = json.dumps(graphRoot)                                                        # Convert graph into json format

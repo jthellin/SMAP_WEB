@@ -119,8 +119,8 @@ function update(source) {
     .attr("dy", "1.2em") 
     .attr("text-anchor", "middle")
     .text(function (request_node) { 
-    if(request_node.path_length>rectW-110){
-        return request_node.path.substring(0, (rectW-103) - 6) + "...";
+    if(request_node.path_length>rectW-109){
+        return request_node.path.substring(0, rectW-109) + "...";
     }else{
         return request_node.path; 
     }});

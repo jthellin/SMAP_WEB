@@ -147,8 +147,8 @@ def jsonForm(decoded_request, parameters):
     requestSplit = decoded_request.split('\n')
     jsonBody = requestSplit[len(requestSplit)-1]
 
-    invalidjson_pattern = r"{\s*(?:\w+\s*:\s*(?:'[^']*'|\d+)|\s*)\s*(?:,\s*(?:\w+\s*:\s*(?:'[^']*'|\d+)|\s*)\s*)*}"  # Search for malformed json
-    if(re.search(invalidjson_pattern, jsonBody) is None):
+    validjson_pattern = r'\{(?:\s*"[^"]+":\s*("[^"]+"|\d+)(?:,\s*"[^"]+":\s*("[^"]+"|\d+))*)?\}'  # Search for malformed json
+    if(re.search(validjson_pattern, jsonBody) is not None):
        jsonBody = json.loads(jsonBody)
        extractJson(jsonBody, parameters)
     else:  

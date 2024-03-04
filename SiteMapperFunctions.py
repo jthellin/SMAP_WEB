@@ -98,7 +98,7 @@ def stripPOSTParams(decoded_request,parameters,ctype):
         elif(decoded_request.find("Content-Type: application/xml")>0):
             ctype.append("application/xml")
             xmlForm(decoded_request, parameters)
-        elif(decoded_request.find("Content-Type: application/json")>0):
+        elif(re.search(r"Content-Type: application\/[^+]*[+]?(json);?.*", decoded_request)):
             ctype.append("application/json")
             jsonForm(decoded_request, parameters)        
      

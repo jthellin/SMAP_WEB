@@ -68,7 +68,7 @@ def createRequestList(file_contents, filename):
 
     return requestList
 
-# Take in request list and return a pydot graph
+# Take in request list and return a root node
 def createSiteMap(requestList):
     nodes = defaultdict(list)
     if(len(requestList[0].host)>27):
@@ -77,7 +77,7 @@ def createSiteMap(requestList):
         hostname = requestList[0].host
     # Check for root node, if none exist then create one
     if(SiteMapperFunctions.hasRoot == False):
-        print("Creating root...\n")
+        print("Creating root with hostname: " + hostname + "\n")
         requestList.append(SiteMapperFunctions.Request(requestList[0].host,hostname,'/'))
     
     # Sort request list according to depth

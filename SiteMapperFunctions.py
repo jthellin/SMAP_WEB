@@ -7,6 +7,7 @@ import base64
 import json
 
 import re
+import sys
 
 import SiteMapper
 # ************************************************************* #
@@ -34,7 +35,6 @@ class Request:
        request.path = path
     request.depth = getDepth(request.path)
     if (len(hostname)==0):
-       print("\ngot hostname" + hostname+ "\n")
        hostname = host
     request.encoded = encoded_request
     request.content_type = content_type
@@ -99,7 +99,7 @@ def stripPOSTParams(decoded_request,parameters,ctype):
         elif(decoded_request.find("Content-Type: application/xml")>0):
             ctype.append("application/xml")
             xmlForm(decoded_request, parameters)
-        elif(re.search(r"Content-Type: application\/[^+]*[+]?(json);?.*", decoded_request)):
+        elif(re.search(r"Content[-\s]*Type: application\/[^+]*[+]?(json);?.*", decoded_request)):
             ctype.append("application/json")
             jsonForm(decoded_request, parameters)        
      
@@ -145,8 +145,16 @@ def xmlForm(decoded_request, parameters):
 # JSON body
 def jsonForm(decoded_request, parameters):
     requestSplit = decoded_request.split('\n')
-    jsonBody = json.loads(requestSplit[len(requestSplit)-1])
-    extractJson(jsonBody, parameters)
+    jsonBody = requestSplit[len(requestSplit)-1]
+
+    invalidjson_pattern = r"{\s*(?:\w+\s*:\s*(?:'[^']*'|\d+)|\s*)\s*(?:,\s*(?:\w+\s*:\s*(?:'[^']*'|\d+)|\s*)\s*)*}"  # Search for malformed json
+    if(re.search(invalidjson_pattern, jsonBody) is None):
+       jsonBody = json.loads(jsonBody)
+       extractJson(jsonBody, parameters)
+    else:  
+        corrected_json = fixJson(jsonBody)
+        jsonBody = json.loads(corrected_json)
+        extractJson(jsonBody, parameters)
 
 # Helper function to recursively iterate through json structure
 def extractJson(jsonBody, parameters):
@@ -156,8 +164,14 @@ def extractJson(jsonBody, parameters):
             extractJson(value, parameters) 
     elif isinstance(jsonBody, list):
         for nestedJson in jsonBody:
-            extractJson(nestedJson,parameters)      
- 
+            extractJson(nestedJson,parameters)   
+
+# Fixes malformed json
+def fixJson(jsonBody):
+    fixedjsonBody = re.sub(r'(\w+)(\s*:\s*)', r'"\1"\2', jsonBody)    # Replace keys without quotes with keys with quotes
+    fixedjsonBody = fixedjsonBody.replace("'", '"')    # Fix single quotes to double quotes for string values
+    return fixedjsonBody
+
 # Ensure there are no duplicate requests with the same path, method, and parameters. 
 def removeDuplicates(requestList):
   unique_requests_set = set()       # Use a set to track unique requests based on path, parameters, and method.
@@ -260,10 +274,14 @@ def parseRequests(root):
                  hasBody = False
            if(property.tag == "path"):
               path = property.text
-              if(path == "/"):                              # Check if site map has root element - create one later if not
+              if re.search(r'/{2,}', path):                     #Check if path has extra forward slashes and replace with a single slash
+                fixed_path = re.sub(r'/+', '/', path)   
+              else:
+                 fixed_path = path
+              if(fixed_path == "/"):                              # Check if site map has root element - create one later if not
                   hasRoot = True
-              if "?" in path:                               # Fetch any URL parameters and strip from path
-                path,parameters = stripURLParams(path,parameters)
+              if "?" in fixed_path:                               # Fetch any URL parameters and strip from path
+                fixed_path,parameters = stripURLParams(fixed_path,parameters)
 
            if(property.tag == "request"):                    # Decode request body and pull out parameters
               encoded_request = property.text
@@ -277,10 +295,10 @@ def parseRequests(root):
                         decoded_request = str(decoded_request)
                         stripPOSTParams(decoded_request,parameters, content_type)
                     except:
-                        print("There was an issue parsing this request: "+ method + " " + path)               
-                requestList.append(Request(host,method,path,parameters,encoded_request, content_type))
+                        print("There was an issue parsing this request: "+ method + " " + fixed_path)               
+                requestList.append(Request(host,method,fixed_path,parameters,encoded_request, content_type))
               else:
-                requestList.append(Request(host,method,path,parameters,encoded_request, content_type)) 
+                requestList.append(Request(host,method,fixed_path,parameters,encoded_request, content_type)) 
     return requestList            
 
 

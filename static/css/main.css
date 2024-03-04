@@ -160,6 +160,24 @@ label {
     text-overflow: ellipsis;
     max-height:80vh;
   }
+
+  .aboutleft {
+    flex: 1;  /* grow */
+    padding: 30px;
+    font-size:small;
+    color: black;
+    margin-left: 10vw;
+    font-family: "Verdana", sans-serif;
+  }
+  
+  .aboutright {
+    flex: 1;
+    padding: 30px;
+    font-size:small;
+    color: black;
+    margin-right: 10vw;
+    font-family: "Verdana", sans-serif;
+  }
 /* Context menus */
   .context-menu {
     background-color: white;

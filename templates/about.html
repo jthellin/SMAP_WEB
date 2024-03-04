@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Mapper &ndash; About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/android-chrome-512x512.png') }}">
+</head>
+<body>
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+      <div class="box">
+        <div class = "box-cell box3">
+          <a class="pure-menu-heading" href="/">Home</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<h1 class = "splash-subhead is-center">How to use SMAP</h1>
+<div class = "box">
+    <div class="aboutleft">
+        You can save site maps from Burp Suite by right clicking a host in the target tab and select "save selected items".
+    </div>
+    <div class="aboutright">
+        <img src="{{ url_for('static', filename='images/burpsitemapAbout.png') }}" style = "width:30vw;height: auto;" >
+    </div>
+</div>
+<div class = "box">
+    <div class="aboutleft">
+        <img src="{{ url_for('static', filename='images/uploadAbout.png') }}" style = "width:35vw;height: auto;" >
+    </div>
+    <div class="aboutright">
+        Upload a Burp Suite site map or a SMAP file to the application to begin mapping.
+        Once a valid file is uploaded, click "View in Site Mapper".<br><br>
+        The application optimizes Burp Suite site maps for enhanced utility by using several default behaviors.
+         It achieves this by eliminating duplicate requests, excluding images and fonts, consolidating similar requests with varying parameters,
+         adjusting the request depth for those sharing the same path but different methods, and merging similar endpoints with varying path IDs.
+    </div>
+</div>
+<div class = "box">
+    <div class="aboutleft">
+        Once the underlying structure is created, it is rendered onto the view page. <br><br>
+        On the left side, there's a graph view showcasing each request as a square node, color-coded based on the request method.
+        If the request includes parameters or vulnerabilities, they will be shown at the bottom right corner of the request. 
+        The count of vulnerabilities is displayed within a box, color-coded according to the most severe finding.  
+        You can move across the graph by clicking and dragging, and adjust the zoom level using the mouse wheel.<br><br>
+        On the right side, you'll find a request view providing detailed information such as the full path, method, parameters, and content-type for the currently selected request.
+        This section also incorporates vulnerabilities and notes sections, initially empty when loading a map, allowing users to input relevant information as needed.<br>
+    </div>
+    <div class="aboutright">
+        <img src="{{ url_for('static', filename='/images/viewpageAbout.png') }}" style = "width:55vw;height: auto;" >
+    </div>
+</div>
+
+<div class="footer l-box is-center">
+    Written by Jackson Thellin.&nbsp;&nbsp;&nbsp;&nbsp; &#8226;  &nbsp;&nbsp;&nbsp;&nbsp;         
+    <a href="/about" style="left:100px;color: white;">About</a>
+</div>
+</div>
+</body>
+</html>

@@ -5,6 +5,7 @@ from collections import defaultdict
 from defusedxml.ElementTree import fromstring
 import base64
 import json
+from jsonschema import validate
 
 import re
 import sys
@@ -138,21 +139,28 @@ def xmlForm(decoded_request, parameters):
        parameters.append(root.tag)
     else:
         for parameter in root:
-            parameters.append(parameter.tag)             # Check if the body uses SOAP web services. Will have parameters nested in api functions
-
-          
+            parameters.append(parameter.tag)             # Check if the body uses SOAP web services. Will have parameters nested in api functions     
 
 # JSON body
 def jsonForm(decoded_request, parameters):
-    requestSplit = decoded_request.split('\n')
-    jsonBody = requestSplit[len(requestSplit)-1]
+    schema = {                                           # Describe what kind of json you expect.
+        "type" : "object",
+        "properties" : {
+            "description" : {"type" : "string"},
+            "status" : {"type" : "boolean"},
+            "value_a" : {"type" : "number"},
+            "value_b" : {"type" : "number"},
+        },
+    }     
 
-    validjson_pattern = r'\{(?:\s*"[^"]+":\s*("[^"]+"|\d+)(?:,\s*"[^"]+":\s*("[^"]+"|\d+))*)?\}'  # Search for malformed json
-    if(re.search(validjson_pattern, jsonBody) is not None):
-       jsonBody = json.loads(jsonBody)
+    requestSplit = decoded_request.split('\n')
+    jsonString = requestSplit[len(requestSplit)-1]
+    try:         
+       jsonBody = json.loads(jsonString)                     # Check if json is well formed
+       validate(instance=jsonBody, schema=schema)
        extractJson(jsonBody, parameters)
-    else:  
-        corrected_json = fixJson(jsonBody)
+    except:  
+        corrected_json = fixJson(jsonString)              
         jsonBody = json.loads(corrected_json)
         extractJson(jsonBody, parameters)
 

@@ -24,6 +24,10 @@ def home():
     SiteMapperFunctions.hasRoot = False
     return render_template('home.html')
 
+@app.route("/about", methods=['GET'])
+def about():
+    return render_template('about.html')
+
 # File Upload
 @app.route("/view", methods=['POST'])
 def upload():

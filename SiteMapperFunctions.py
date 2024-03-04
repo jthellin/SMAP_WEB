@@ -34,6 +34,7 @@ class Request:
        request.path = path
     request.depth = getDepth(request.path)
     if (len(hostname)==0):
+       print("\ngot hostname" + hostname+ "\n")
        hostname = host
     request.encoded = encoded_request
     request.content_type = content_type

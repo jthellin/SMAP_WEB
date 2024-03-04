@@ -84,6 +84,7 @@ function openPopup(content) {
     var popup = window.open("", "popupWindow", "width=600,height=400");
     var newDiv = popup.document.createElement("div");
     newDiv.innerText = content;
+    popup.document.body.innerHTML="";
     popup.document.body.appendChild(newDiv);
 }
 

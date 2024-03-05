@@ -309,6 +309,7 @@ removeRequest.addEventListener("click", function() {
     removeNode(graphRoot);    // Call the removeNode function to remove the node from the graphRoot
 
     document.getElementById('selectedRequest').innerText = "";          //Remove info from request panel
+    document.getElementById('selectedRequest').style.border = "none"
     document.getElementById('notesLabel').innerText = "";
     document.getElementById('notes').style.display = "none";
     document.getElementById('notes').value  = "";

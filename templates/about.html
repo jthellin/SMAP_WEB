@@ -29,12 +29,12 @@
 </div>
 <div class = "box">
     <div class="aboutleft">
-        <img src="{{ url_for('static', filename='images/uploadAbout.png') }}" style = "width:35vw;height: auto;" class = "aboutimage">
+        <img src="{{ url_for('static', filename='images/uploadAbout.png') }}" style = "width:40vw;height: auto;" class = "aboutimage">
     </div>
     <div class="aboutright">
         Upload a Burp Suite site map or a SMAP file to the application to begin mapping.
         Once a valid file is uploaded, click "View in Site Mapper".<br><br>
-        The application optimizes Burp Suite site maps for enhanced utility by using several default behaviors.
+        The application modifies Burp Suite site maps for enhanced usability by using several default behaviors.
          It achieves this by eliminating duplicate requests, excluding images and fonts, consolidating similar requests with varying parameters,
          adjusting the request depth for those sharing the same path but different methods, and merging similar endpoints with varying path IDs.
     </div>
@@ -44,15 +44,48 @@
         Once the underlying structure is created, it is rendered onto the view page. <br><br>
         On the left side, there's a graph view showcasing each request as a square node, color-coded based on the request method.
         If the request includes parameters or vulnerabilities, they will be shown at the bottom right corner of the request. 
-        The count of vulnerabilities is displayed within a box, color-coded according to the most severe finding.  
+        The count of vulnerabilities is displayed within a box, color-coded according to the most severe finding. 
         You can move across the graph by clicking and dragging, and adjust the zoom level using the mouse wheel.<br><br>
-        On the right side, you'll find a request view providing detailed information such as the full path, method, parameters, and content-type for the currently selected request.
-        This section also incorporates vulnerabilities and notes sections, initially empty when loading a map, allowing users to input relevant information as needed.<br>
     </div>
     <div class="aboutright">
-        <img src="{{ url_for('static', filename='/images/viewpageAbout.png') }}" style = "width:55vw;height: auto;" class = "aboutimage" >
+        <img src="{{ url_for('static', filename='/images/viewgraphAbout.png') }}" style = "width:50vw;height: auto;" class = "aboutimage" >
     </div>
 </div>
+<div class = "box">
+    <div class="aboutleft">
+        <img src="{{ url_for('static', filename='/images/viewrequestAbout.png') }}" style = "width:25vw;height: auto;" class = "aboutimage" >
+    </div>
+    <div class="aboutright">
+        On the right side, you'll find a request view providing detailed information such as the full path, method, parameters, and content-type for the currently selected request.
+        This section also incorporates vulnerabilities and notes sections, allowing users to input relevant information as needed.<br>
+    </div>
+</div>
+<div class = "box">
+    <div class="aboutleft">
+        Right click on a request node or the request panel to open the request menu. 
+        Users can view the full request in a pop up window, hide or show any children requests, add vulnerabilities,
+        add an outline color, or remove the request from the graph. 
+    </div>
+    <div class="aboutright">
+        <img src="{{ url_for('static', filename='/images/requestMenu.png') }}" style = "width:25vw;height: auto;" class = "aboutimage" >
+    </div>
+</div>
+<div class = "box">
+    <div class="aboutleft">
+        <img src="{{ url_for('static', filename='/images/graphMenu.png') }}" style = "width:25vw;height: auto;" class = "aboutimage" >
+    </div>
+    <div class="aboutright">
+        Right click on the gray canvas to open the graph menu. Users can expand and collapse the entire graph from the root
+        or save the graph as an image, an svg, or a SMAP file. SMAP files retain any notes, vulnerabilities, or colors incorporated
+         into the graph, allowing users to import the file into SMAP for later viewing.
+    </div>
+</div>
+<br>
+<div class="is-center">
+        Have a question or a suggestion? Feel free to message me on slack or <a href=mailto:“jthellin@netspi.com”>email</a>
+</div>
+<br><br><br>
+
 
 <div class="footer l-box is-center">
     Written by Jackson Thellin.&nbsp;&nbsp;&nbsp;&nbsp; &#8226;  &nbsp;&nbsp;&nbsp;&nbsp;         

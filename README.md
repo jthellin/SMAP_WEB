@@ -11,12 +11,8 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
-Start the application. The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000)
-```
-flask --app app run
-```
 ## Running the App
-The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000)
+The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000). View the about page (linked at bottom of page) for more detailed instructions.
 ```
 flask --app app run
 ```

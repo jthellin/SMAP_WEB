@@ -160,7 +160,6 @@ label {
     text-overflow: ellipsis;
     max-height:80vh;
   }
-
   .aboutleft {
     flex: 1;  /* grow */
     padding: 30px;
@@ -169,7 +168,9 @@ label {
     margin-left: 10vw;
     font-family: "Verdana", sans-serif;
   }
-  
+  .aboutimage{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
   .aboutright {
     flex: 1;
     padding: 30px;

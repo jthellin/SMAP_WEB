@@ -50,8 +50,11 @@ function click(request_node) {
     selectedRequest = request_node;                                // Update selection
     vulnContainer.innerHTML="";                                    
     document.getElementById('selectedRequest').innerText = request_node.label;
+    document.getElementById('selectedRequest').style.border ="2px solid "+request_node.strokecolor;
+    document.getElementById('selectedRequest').style.borderStyle ="none none solid none";
     document.getElementById('notesLabel').innerText = "Notes:";
     document.getElementById('notes').style.display = "block";
+    document.getElementById('notes').style.height = "23px";
     document.getElementById('notes').value  = request_node.notes;
     if(request_node.parameters.length > 0){                         
         document.getElementById('selectedParams').innerText = request_node.parameters;
@@ -225,6 +228,9 @@ d3.select("body").on("contextmenu", function(){
 
     var target = d3.event.target;
 
+    //1px = (100vw / [document.documentElement.clientWidth] px)
+    var pixels = document.documentElement.clientWidth - 371
+
     if(target.id == "severity" || target.id == "description" || target.id == "finding"){
         generalContextMenu.style("display","none");                                     // Show the vulnerability context menu at the mouse coordinates
         requestContextMenu.style("display","none");
@@ -232,7 +238,7 @@ d3.select("body").on("contextmenu", function(){
         .style("top", adjustedY  + "px")
         .style("display", "block");
         selectedVuln = target;
-    }else if(requestSelected || (absoluteMouseX> 1548 && selectedRequest)){                                                               
+    }else if(requestSelected || (absoluteMouseX> pixels && selectedRequest)){                                                               
         generalContextMenu.style("display","none");                                     // Show the request context menu at the mouse coordinates
         vulnContextMenu.style("display","none");
         requestContextMenu.style("left", adjustedX  + "px")
@@ -264,6 +270,8 @@ colors.forEach(function(color) {
     color.addEventListener('click', function() {
         var colorRequest = selectedRequest
         colorRequest.strokecolor = color.id;
+        document.getElementById('selectedRequest').style.border ="2px solid "+color.id;
+        document.getElementById('selectedRequest').style.borderStyle ="none none solid none";
     });
     update(graphRoot);
 });

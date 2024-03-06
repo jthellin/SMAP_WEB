@@ -10,7 +10,7 @@ if(isSMAP==0){
         var graphRoot = JSON.parse(trimmedData);
       }
       catch(err) {
-        alert("Site Map is malformed");
+        alert("Site Map is malformed. Try saving a new map from Burp Suite and reuploading the file. If you are still encountering issues, contact Jackson Thellin.");
         window.location.replace("http://127.0.0.1:5000/");
       }
 }else{
@@ -19,7 +19,7 @@ if(isSMAP==0){
         var graphRoot = JSON.parse(trimmedData);
       }
       catch(err) {
-        alert("smap file is malformed");
+        alert("smap file is malformed. Try reuploading the file on the upload page. If you are still encountering issues, contact Jackson Thellin.");
         window.location.replace("http://127.0.0.1:5000/");
       }
 }

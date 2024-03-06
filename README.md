@@ -11,8 +11,9 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
+Ensure flask and python are in the system PATH variable. Follow [this guide](https://www.educative.io/answers/how-to-add-python-to-path-variable-in-windows) to add these if you are receiving errors such as "flask command not found".
 ## Running the App
-The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000). View the about page (linked at bottom of page) for more detailed instructions.
+Run the below command to start a python server. The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000). View the about page (linked at bottom of page) for more detailed instructions.
 ```
 flask --app app run
 ```

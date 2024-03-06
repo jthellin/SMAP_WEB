@@ -143,8 +143,8 @@ function saveVulns(selectedRequest){
 function loadVulns(selectedRequest){
     selectedRequest.vulnerabilities.forEach(function(vuln){
         var s = vuln[0];                                      // Grab severity, finding, and description
-        var f = vuln[1];
-        var d = vuln[2];
+        let f = vuln[1];
+        let d = vuln[2];
         var newFindingHTML = '<div style="margin:5px 0px">';  
     
         if(s=='Low'){                                         
@@ -154,14 +154,15 @@ function loadVulns(selectedRequest){
         }else{
             newFindingHTML += '<select class="severity" id="severity" onchange="attachColor()"><option value="Low">L</option><option value="Medium">M</option><option value="High" selected>H</option></select>';
         }
-        newFindingHTML +='<input type="text" class="finding" value="'+f+'" placeholder="Finding" id="finding"><textarea class ="description" placeholder="Description" id="description">'+d+'</textarea></div>';
+        newFindingHTML +='<input type="text" class="finding" placeholder="Finding" id="finding"><textarea class ="description" placeholder="Description" id="description">'+d+'</textarea></div>';
 
         var tempContainer = document.createElement('div');   // Convert the HTML string to DOM elements
         tempContainer.innerHTML = newFindingHTML;
         var newFinding = tempContainer.firstChild;           // Get the newly created finding element
-        
+
         vulnContainer.appendChild(newFinding);              //  Append the newly created vulnerability to vulnContainer
         attachColor()                                       // Update selection color based on current severity
+        document.getElementById("finding").value = f;
     })
 }
 

@@ -14,6 +14,7 @@ if(isSMAP==0){
 var selectedRequest;
 var requestSelected = false;
 var removingRequest = false;
+var flipGraph = true;
 
 // Define render area and margins
 var margin = {

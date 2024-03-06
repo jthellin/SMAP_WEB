@@ -6,10 +6,22 @@
 //Check if a burp suite or smap file was uploaded
 if(isSMAP==0){
     var trimmedData = graphRoot.slice(2, -2); // Parse root into correct json format
-    var graphRoot = JSON.parse(trimmedData);
+    try {
+        var graphRoot = JSON.parse(trimmedData);
+      }
+      catch(err) {
+        alert("Site Map is malformed");
+        window.location.replace("http://127.0.0.1:5000/");
+      }
 }else{
     var trimmedData = graphRoot.replace(/\\/g, ''); // Parse root into correct json format
-    var graphRoot = JSON.parse(trimmedData);
+    try {
+        var graphRoot = JSON.parse(trimmedData);
+      }
+      catch(err) {
+        alert("smap file is malformed");
+        window.location.replace("http://127.0.0.1:5000/");
+      }
 }
 var selectedRequest;
 var requestSelected = false;

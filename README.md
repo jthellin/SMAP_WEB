@@ -1,6 +1,6 @@
 # Site Mapper Web App
 ### Written By Jackson Thellin
-Generates interactive visual tree graphs using Burp Suite site maps. Users may make various edits to the graph and open it later using the smap file.
+Generates interactive visual tree graphs using Burp Suite site maps. Users may make various edits to the graph and open it later using a smap file.
 
 ## Installation
 Clone the github reopsitory

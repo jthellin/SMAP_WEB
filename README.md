@@ -11,6 +11,7 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
+Ensure flask and python are in the system PATH variable. Follow this guide to add these if you are receiving errors such as "flask command not found".
 ## Running the App
 The application can be accessed at local host port 5000 using your browser (https://127.0.0.1:5000). View the about page (linked at bottom of page) for more detailed instructions.
 ```

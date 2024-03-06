@@ -1,5 +1,5 @@
 //************************************************************************************ */
-// Drawing D3 graph using Json data. Contains main update loop2
+// Drawing D3 graph using Json data. Contains main update loop
 // Tree graph template created by Augustus Yuan - https://codepen.io/augbog/pen/LEXZKK
 //************************************************************************************ */
 

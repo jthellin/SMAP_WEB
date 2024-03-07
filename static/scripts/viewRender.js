@@ -4,10 +4,13 @@
 //************************************************************************************ */
 
 //Check if a burp suite or smap file was uploaded
+var removeRequestsWithoutParams = document.getElementById("removeRequestsWithoutParams");
+
 if(isSMAP==0){
-    var trimmedData = graphRoot.slice(2, -2); // Parse root into correct json format
+        var trimmedData = graphRoot.slice(2, -2); // Parse root into correct json format
     try {
-        var graphRoot = JSON.parse(trimmedData);
+        var newRoot = JSON.parse(trimmedData);
+        graphRoot=newRoot
       }
       catch(err) {
         alert("Site Map is malformed. Try saving a new map from Burp Suite and reuploading the file. If you are still encountering issues, contact Jackson Thellin.");
@@ -16,12 +19,18 @@ if(isSMAP==0){
 }else{
     var trimmedData = graphRoot.replace(/\\/g, ''); // Parse root into correct json format
     try {
-        var graphRoot = JSON.parse(trimmedData);
+        var newRoot = JSON.parse(trimmedData);
+        graphRoot=newRoot
       }
       catch(err) {
         alert("smap file is malformed. Try reuploading the file on the upload page. If you are still encountering issues, contact Jackson Thellin.");
         window.location.replace("http://127.0.0.1:5000/");
       }
+}
+if(onlyParams == 1){
+    removeRequestsWithoutParams.style.display = "none";
+}else{
+    removeRequestsWithoutParams.style.display = "block";
 }
 var selectedRequest;
 var requestSelected = false;

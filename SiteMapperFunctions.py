@@ -258,7 +258,9 @@ def removeRequestsWithoutParameters(requestList):
       if(len(request.parameters)>0):
          requests_with_parameters.append(request)
       elif(request.path == '/'):
-         requests_with_parameters.append(request)         
+         requests_with_parameters.append(request)   
+    global hasRoot
+    hasRoot = True     
     return requests_with_parameters
 
 # Grab information from each xml element representing a request. Create a new request object with the host, path, method, content-type, parameters, and encoded request

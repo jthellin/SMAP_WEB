@@ -10,6 +10,7 @@ var colors = document.querySelectorAll('.color');
 var openRequest = document.getElementById("openRequest");
 var collapseExpand = document.getElementById("col_exp_Request");
 var removeRequest = document.getElementById("removeRequest");
+var removeRequestsWithoutParams = document.getElementById("removeRequestsWithoutParams");
 var addVuln = document.getElementById("addVuln");
 var colorMenu = document.getElementById("color-menu");
 
@@ -298,8 +299,7 @@ removeRequest.addEventListener("click", function() {
             return null; // Skip this node       
         } else {
             if (node.children) {
-                // Recursively remove children
-                node.children = node.children.map(removeNode).filter(function(child) {
+                node.children = node.children.map(removeNode).filter(function(child) {              // Recursively remove children
                     return child !== null;
                 });
             }

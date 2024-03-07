@@ -74,6 +74,7 @@
 <div class="context-menu" id = "general-context-menu">
   <a id="expandAll"  class="context-menu__link" style="cursor: pointer;">Expand all</a>
   <a id="collapseAll"  class="context-menu__link" style="cursor: pointer;">Collapse all</a>
+  <a id="removeRequestsWithoutParams" href="/removeRequestsWithoutParams" class="context-menu__link" style="cursor: pointer;">Remove requests without parameters</a>
   <hr>
   <a id="saveSMAP" class="context-menu__link" style="cursor: pointer;">Save as SMAP</a>
   <a id="saveImage" class="context-menu__link" style="cursor: pointer;">Save as PNG</a>
@@ -98,6 +99,7 @@
     var creationDate = '{{data.date}}';
     var creationVersion = '{{data.version}}';
     var isSMAP = '{{data.isSMAP}}';
+    var onlyParams = '{{data.onlyParams}}';
   </script>
   <!--Scripts for rendering graph and interaction-->
   <script src="{{url_for('static',filename='scripts/viewRender.js')}}" type="text/javascript"></script>

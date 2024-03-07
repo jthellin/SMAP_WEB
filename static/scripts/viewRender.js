@@ -148,9 +148,21 @@ function update(source) {
     }});
     nodeEnter.append("text")      // Number of parameters
     .attr("text-anchor", "start")
-    .attr("x", 117)
+    .attr("x", function(request_node){
+        if(request_node.parameters.length>100){
+            return 116;
+        }else{
+            return 117;
+        }
+    })
     .attr("y",41)
-    .style("font-size", "10")
+    .style("font-size", function(request_node){
+        if(request_node.parameters.length>100){
+            return 8;
+        }else{
+            return 10;
+        }
+    })
     .style("white-space", "pre")
     .text(function (request_node) {
     if(request_node.parameters.length > 0){             //Center based on number of digits

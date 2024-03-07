@@ -220,7 +220,7 @@ d3.select("body").on("contextmenu", function(){
     d3.event.preventDefault();                                   // Prevent the default right-click menu from appearing
     
     var contextMenuWidth = 255;
-    var contextMenuHeight = 200;
+    var contextMenuHeight = 230;
 
     var maxX = window.innerWidth - contextMenuWidth;             // Calculate the maximum x and y coordinates to ensure the menu stays within the viewport
     var maxY = window.innerHeight - contextMenuHeight;

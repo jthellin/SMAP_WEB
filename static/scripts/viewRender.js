@@ -129,6 +129,7 @@ function update(source) {
     nodeEnter.append("rect").attr("class", "vulnerability");    //Vulnerability rectangle. 
 
     nodeEnter.append("text")  // Append method string to node
+    .attr("class", "label")
     .attr("x", rectW / 2)
     .attr("y", rectH / 2)
     .attr("dy", "-0.3em") 
@@ -147,6 +148,7 @@ function update(source) {
         return request_node.path; 
     }});
     nodeEnter.append("text")      // Number of parameters
+    .attr("class", "parameters")
     .attr("text-anchor", "start")
     .attr("x", function(request_node){
         if(request_node.parameters.length>100){
@@ -216,7 +218,7 @@ function update(source) {
         }
     });
 
-    nodeUpdate.select("text")
+    nodeUpdate.select("text.label")
     .style("fill-opacity", 1)
     .style("fill", function(request_node){
         if(selectedRequest==request_node){

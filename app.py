@@ -13,7 +13,7 @@ import SiteMapperFunctions
 
 app = Flask(__name__)
 app.config['UPLOAD_DIRECTORY'] = 'uploads/'
-app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024 #200MB file upload limit
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024 #500MB file upload limit
 app.config['UPLOAD_EXTENSIONS'] = ['','.smap']
 app.secret_key = "scannys_secret_key"
 
@@ -98,4 +98,4 @@ def upload():
         else:
             return redirect('/')
     except RequestEntityTooLarge:
-       return 'File is larger than the 200MB limit'
+       return 'File is larger than the 500MB limit'

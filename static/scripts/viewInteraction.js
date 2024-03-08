@@ -374,7 +374,7 @@ redact.addEventListener("click", function(){
         });
 
         let selectedNode = d3.select('g.node[transform="translate(0,0)"]');     //Replace root node with generic root
-        selectedNode.selectAll("text").remove();
+        selectedNode.selectAll("text.label").remove();
         selectedNode.append("text")
         .attr("x", rectW / 2)
         .attr("y", rectH / 2)
@@ -385,7 +385,7 @@ redact.addEventListener("click", function(){
         .attr("x", rectW / 2)
         .attr("dy", "1.2em") 
         .attr("text-anchor", "middle")
-        .text("/");
+        .text("/")
 
         redact.style.display = "none";                                  //Remove redact option in graph menu
         openRequest.style.display = "none";                              //Remove request view option in request menu

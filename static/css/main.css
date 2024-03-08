@@ -277,6 +277,6 @@ label {
     resize:vertical;
     width: 100%;
     height: auto;
-    min-height:23px;
+    min-height:30px;
     display: none;
 }

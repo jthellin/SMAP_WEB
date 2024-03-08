@@ -3,6 +3,7 @@
 //****************************************************** */
 
 //Global Variables/Html elements
+var hostnameLabel = document.getElementById("hostname");
 
 //Request context menu for collapsing/expanding, coloring, removing, and other edits
 var requestContextMenu = d3.select("#request-context-menu");
@@ -10,7 +11,6 @@ var colors = document.querySelectorAll('.color');
 var openRequest = document.getElementById("openRequest");
 var collapseExpand = document.getElementById("col_exp_Request");
 var removeRequest = document.getElementById("removeRequest");
-var removeRequestsWithoutParams = document.getElementById("removeRequestsWithoutParams");
 var addVuln = document.getElementById("addVuln");
 var colorMenu = document.getElementById("color-menu");
 
@@ -18,6 +18,7 @@ var colorMenu = document.getElementById("color-menu");
 var generalContextMenu = d3.select("#general-context-menu");
 var expandAll = document.getElementById("expandAll");
 var collapseAll = document.getElementById("collapseAll");
+var redact = document.getElementById("redactSensitiveInformation");
 var saveSVG = document.getElementById("saveSVG");
 var savePNG = document.getElementById("saveImage");
 
@@ -55,7 +56,7 @@ function click(request_node) {
     document.getElementById('selectedRequest').style.borderStyle ="none none solid none";
     document.getElementById('notesLabel').innerText = "Notes:";
     document.getElementById('notes').style.display = "block";
-    document.getElementById('notes').style.height = "23px";
+    document.getElementById('notes').style.height = "30px";
     document.getElementById('notes').value  = request_node.notes;
     if(request_node.parameters.length > 0){                         
         document.getElementById('selectedParams').innerText = request_node.parameters;
@@ -340,6 +341,56 @@ removeVulnMenu.addEventListener("click", function() {
 // Save notes to request when any edits are made
 notesInput.addEventListener("input",function() {
     selectedRequest.notes = notesInput.value;
+});
+
+// Adjust menus if uploaded graph is already redacted
+if(redacted == 1){                                                  
+    redact.style.display = "none";                                  //Remove redact option in graph menu
+    openRequest.style.display = "none";                              //Remove request view option in request menu
+}
+
+//Redact hostnames and encoded requests.
+redact.addEventListener("click", function(){
+    if(redacted == 0){
+        searchLabel = host.substring(0, 26);                        //Redact hostnames
+        searchMethod = host.substring(0, 26);
+        host = "[REDACTED]" 
+        hostnameLabel.innerText = "[REDACTED]";
+        if(graphRoot.label.includes(searchLabel)){
+            graphRoot.label = "/"
+        }
+        if(graphRoot.method.includes(searchMethod)){
+            graphRoot.method = "[REDACTED]"
+        }
+
+        function iterateThroughChildren(node, callback) {                   // Iterate through nodes to remove all encoded requests
+            callback(node);
+            if (node.children) {
+                node.children.forEach(child => iterateThroughChildren(child, callback));
+            }
+        }
+        iterateThroughChildren(graphRoot, function(node) {
+            node.encoded_request = "";
+        });
+
+        let selectedNode = d3.select('g.node[transform="translate(0,0)"]');     //Replace root node with generic root
+        selectedNode.selectAll("text").remove();
+        selectedNode.append("text")
+        .attr("x", rectW / 2)
+        .attr("y", rectH / 2)
+        .attr("dy", "-0.3em")
+        .attr("text-anchor", "middle")
+        .text("GET")
+        .append("tspan")  
+        .attr("x", rectW / 2)
+        .attr("dy", "1.2em") 
+        .attr("text-anchor", "middle")
+        .text("/");
+
+        redact.style.display = "none";                                  //Remove redact option in graph menu
+        openRequest.style.display = "none";                              //Remove request view option in request menu
+        redacted = 1;
+    }
 });
 
 // Traverse the tree and expand collapsed nodes, which have a populated _children 

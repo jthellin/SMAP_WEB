@@ -71,8 +71,8 @@ def createRequestList(file_contents, filename):
 # Take in request list and return a root node
 def createSiteMap(requestList):
     nodes = defaultdict(list)
-    if(len(requestList[0].host)>27):
-        hostname = requestList[0].host[:27] + "..."
+    if(len(requestList[0].host)>26):
+        hostname = requestList[0].host[:26] + "..."
     else:
         hostname = requestList[0].host
     # Check for root node, if none exist then create one

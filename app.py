@@ -27,11 +27,13 @@ def home():
     SiteMapperFunctions.hasRoot = False
     return render_template('upload.html')
 
-@app.route("/about", methods=['GET'])                   #About page
+ #About page
+@app.route("/about", methods=['GET'])                      
 def about():
     return render_template('about.html')
 
-@app.route("/removeRequestsWithoutParams")      #Remove request without parameters
+#Remove request without parameters
+@app.route("/removeRequestsWithoutParams")                  
 def removeRequests():
     if(app.config['IS_SMAP']==1):
         print("This funciton only works with Burp Suite site maps and not smap files...")
@@ -39,12 +41,13 @@ def removeRequests():
         requestList = SiteMapperFunctions.removeRequestsWithoutParameters(app.config['MY_REQUEST_LIST'])            # Call python funciton with global request list
         app.config['MY_REQUEST_LIST']  =  requestList                                                                         
         graphRoot = SiteMapper.createSiteMap(requestList)
-        jsonRoot = json.dumps(graphRoot)                                                        # Convert graph into json format
+        jsonRoot = json.dumps(graphRoot)                                                                            # Convert graph into json format
         hostname = SiteMapperFunctions.hostname
         creationDate = SiteMapper.date
         creationVers = SiteMapper.version
         app.config['IS_SMAP'] = 0
-        data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':1} # Format data to pass into template 
+        redacted = 0
+        data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':1, "redacted":redacted} # Format data to pass into template 
         app.config['IS_SMAP'] = 1
         return render_template('view.html', data=data)  
     except:
@@ -71,12 +74,16 @@ def upload():
                     hostname = jsonRoot.pop('host', None)
                     creationDate = jsonRoot.pop('date', None)
                     creationVers = jsonRoot.pop('version', None)
+                    if(hostname == "[REDACTED]"):                       # Check if loaded file is redacted
+                        redacted = 1
+                    else:
+                        redacted = 0
                     app.config['IS_SMAP'] = 1
-                    data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':1} # Format data to pass into template 
+                    data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':1, "redacted":redacted} # Format data to pass into template 
                     return render_template('view.html', data=data)  
                 else:                     
-                    SiteMapperFunctions.hostname = ""                      #Reset global variables for site map generation
-                    SiteMapperFunctions.hasRoot = False                                                                  # Parse as Burp Suite file
+                    SiteMapperFunctions.hostname = ""                                                       #Reset global variables for site map generation
+                    SiteMapperFunctions.hasRoot = False                                                     # Parse as Burp Suite file
                     requestList = SiteMapper.createRequestList(file_contents, file.filename) 
                     app.config['MY_REQUEST_LIST'] = requestList        
                     graphRoot = SiteMapper.createSiteMap(requestList)
@@ -85,7 +92,8 @@ def upload():
                     creationDate = SiteMapper.date
                     creationVers = SiteMapper.version
                     app.config['IS_SMAP'] = 0
-                    data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':0} # Format data to pass into template 
+                    redacted = 0
+                    data = {'root': jsonRoot, 'host': hostname, "date": creationDate,"version":creationVers,"isSMAP":app.config['IS_SMAP'],'onlyParams':0, "redacted":redacted} # Format data to pass into template 
                     return render_template('view.html', data=data)                                                               
         else:
             return redirect('/')

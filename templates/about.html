@@ -32,7 +32,7 @@
         <img src="{{ url_for('static', filename='images/uploadAbout.png') }}" style = "width:40vw;height: auto;" class = "aboutimage">
     </div>
     <div class="aboutright">
-        Upload a Burp Suite site map or a SMAP file to the application to begin mapping.
+        Upload a Burp Suite site map or a smap file to the application to begin mapping.
         Once a valid file is uploaded, click "View in Site Mapper".<br><br>
         The application modifies Burp Suite site maps for enhanced usability by using several default behaviors.
          It achieves this by eliminating duplicate requests, excluding images and fonts, consolidating similar requests with varying parameters,
@@ -76,9 +76,10 @@
         <img src="{{ url_for('static', filename='/images/graphMenu.png') }}" style = "width:25vw;height: auto;" class = "aboutimage" >
     </div>
     <div class="aboutright">
-        Right click anywhere on the gray canvas to open the graph menu. Users can expand and collapse the entire graph from the root, remove all requests without parameters, 
-        or save the graph as an image, an svg, or a SMAP file. SMAP files retain any notes, vulnerabilities, or colors incorporated
-         into the graph, allowing users to import the file into SMAP for later viewing. Note that requests without parameters can only be removed if a Burp Suite site map was uploaded.
+        Right click anywhere on the gray canvas to open the graph menu. Users can expand and collapse the entire graph from the root, remove all requests without parameters, redact hostnames
+        and encoded requests, or save the graph as an image, an svg, or a smap file. smap files retain any notes, vulnerabilities, or colors incorporated
+         into the graph, allowing users to import the file into smap for later viewing. Note that requests without parameters can only be removed if a Burp Suite site map was uploaded and 
+         performing this action will remove any edits made to the map. Redacted maps may be saved as a smap file and shared without worry of leaking any sensitive information.
     </div>
 </div>
 <br>

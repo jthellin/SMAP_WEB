@@ -280,3 +280,14 @@ label {
     min-height:30px;
     display: none;
 }
+.toggleRequestPanel{
+    background-color:#180038;
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    right: 370px;
+    top: 37px;
+    padding:0px 8px 0px 8px;
+    cursor: pointer;
+    font-family: sans-serif;
+}

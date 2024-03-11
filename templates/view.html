@@ -23,14 +23,17 @@
 </div>
 
 <!---Site Map Graph-->
-<div class = "box">
+<div class = "box" id="graphPanel">
   <div class = "left">
     <a style="color:dimgrey;font-size: 10px;position: absolute; position: absolute; top: 39px; margin:3px;">Site map exported on {{data.date}}<br>Burp Suite version {{data.version}}</a>
     <svg id="tree-container" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
 
   <!---Request Details-->
-  <div class = "right">
+  <div class="toggleRequestPanel" id ="toggleRequestPanel">
+    > 
+  </div>
+  <div class = "right" id="requestPanel">
     <h3 style="color:black; padding: 5px;" id="selectedRequest"></h3>
     <h4 style="margin-bottom: 0.1em; margin-top: 0.1em" id = "parameterLabel"></h4>
     <h4 style = "background-color: #ebebeb;margin-bottom: 0.1em; margin-top: 0.1em" id = "selectedParams"></h4>

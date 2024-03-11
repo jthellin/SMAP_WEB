@@ -4,6 +4,8 @@
 
 //Global Variables/Html elements
 var hostnameLabel = document.getElementById("hostname");
+var graphPanel = document.getElementById("graphPanel");
+var requestPanel = document.getElementById("requestPanel");
 
 //Request context menu for collapsing/expanding, coloring, removing, and other edits
 var requestContextMenu = d3.select("#request-context-menu");
@@ -18,6 +20,7 @@ var colorMenu = document.getElementById("color-menu");
 var generalContextMenu = d3.select("#general-context-menu");
 var expandAll = document.getElementById("expandAll");
 var collapseAll = document.getElementById("collapseAll");
+var toggleRequestPanel = document.getElementById("toggleRequestPanel");
 var redact = document.getElementById("redactSensitiveInformation");
 var saveSVG = document.getElementById("saveSVG");
 var savePNG = document.getElementById("saveImage");
@@ -33,6 +36,7 @@ var removeVulnMenu = document.getElementById("removeVulnMenu");
 var addVulnMenu = document.getElementById("addVulnMenu");
 var selectedVuln;
 
+var fullscreen = 0;
 var absoluteMouseX;
 var absoluteMouseY;
 
@@ -220,7 +224,7 @@ function removeAttributes(obj, attributesToRemove) {
 d3.select("body").on("contextmenu", function(){
     d3.event.preventDefault();                                   // Prevent the default right-click menu from appearing
     
-    var contextMenuWidth = 255;
+    var contextMenuWidth = 355;
     var contextMenuHeight = 230;
 
     var maxX = window.innerWidth - contextMenuWidth;             // Calculate the maximum x and y coordinates to ensure the menu stays within the viewport
@@ -241,7 +245,7 @@ d3.select("body").on("contextmenu", function(){
         .style("top", adjustedY  + "px")
         .style("display", "block");
         selectedVuln = target;
-    }else if(requestSelected || (absoluteMouseX> pixels && selectedRequest)){                                                               
+    }else if(requestSelected || (absoluteMouseX> pixels && selectedRequest) && fullscreen ==0){                                                               
         generalContextMenu.style("display","none");                                     // Show the request context menu at the mouse coordinates
         vulnContextMenu.style("display","none");
         requestContextMenu.style("left", adjustedX  + "px")
@@ -422,6 +426,24 @@ collapseAll.addEventListener("click", function() {
     collapseExpanded(graphRoot)
 });
 
+//Hide_show request panel
+toggleRequestPanel.addEventListener("click", function() {
+    if(fullscreen == 0){
+        requestPanel.style.display = "none";
+        graphPanel.style.flex = 0;
+        graphPanel.style.width = "100vw";
+        toggleRequestPanel.innerText = "<";
+        toggleRequestPanel.style.right = "0px";
+        fullscreen = 1;
+    }else{
+        requestPanel.style.display = "block";
+        graphPanel.style.flex = 1;
+        toggleRequestPanel.innerText = ">";
+        toggleRequestPanel.style.right = "370px";
+        fullscreen = 0;
+    }
+});
+
 // Get the absolute mouse coordinates
 d3.select(document).on("mousemove", function() {
     absoluteMouseX = d3.event.pageX;                               
@@ -498,7 +520,6 @@ saveSMAP.addEventListener("click", function() {
     downloadLink.download = host+'.smap';
     downloadLink.click();
 });
-
 
 // Update the visualization
 update(graphRoot);

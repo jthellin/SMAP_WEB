@@ -59,7 +59,7 @@ var nodes, links;
 
 // Attach to svg container with zoom behavior
 var svg = d3.select("#tree-container").attr("width", "100%").attr("height", "100%")
-.call(zm = d3.behavior.zoom().scaleExtent([0.3,2]).on("zoom", redraw)).append("g")
+.call(zm = d3.behavior.zoom().scaleExtent([0.1,2]).on("zoom", redraw)).append("g")
 .attr("transform", "translate(" + 350 + "," + 20 + ")");
 
 //necessary so that zoom knows where to zoom and unzoom from

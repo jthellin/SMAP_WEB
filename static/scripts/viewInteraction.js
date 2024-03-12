@@ -504,11 +504,11 @@ savePNG.addEventListener("click", function() {
             scale = 1;
         }
         var width;
-        var height = 1200;
+        var height = 870;
         if(fullscreen){
-            width = 2500;
+            width = 1600;
         }else{
-            width = 2000;
+            width = 1300;
         }
         canvas.width = (img.width+width)*scale;          // Set canvas dimensions to match image dimensions
         canvas.height = (img.height+height)*scale;

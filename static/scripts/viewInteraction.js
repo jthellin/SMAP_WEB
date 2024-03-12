@@ -496,14 +496,19 @@ savePNG.addEventListener("click", function() {
     var context = canvas.getContext('2d');
 
     img.onload = function() {    // When the image has loaded, draw it onto the canvas
-        var zoom = zm.scale();                          //Get zoom amount and scale image inversely
-        var scale = 1/zoom;
+        var zoom = zm.scale();   
+        var scale;                       //Get zoom amount and scale image inversely if zoomed out 
+        if(zoom<1.0){
+           scale = 1/zoom;
+        }else{
+            scale = 1;
+        }
         var width;
         var height = 1200;
         if(fullscreen){
-            width = 2600;
+            width = 2500;
         }else{
-            width = 2100;
+            width = 2000;
         }
         canvas.width = (img.width+width)*scale;          // Set canvas dimensions to match image dimensions
         canvas.height = (img.height+height)*scale;

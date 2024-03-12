@@ -35,7 +35,8 @@ if(onlyParams == 1){
 var selectedRequest;
 var requestSelected = false;
 var removingRequest = false;
-var flipGraph = true;
+var flipGraph = false;
+var x,y;
 
 // Define render area and margins
 var margin = {
@@ -69,7 +70,7 @@ graphRoot.x0 = 0;
 graphRoot.y0 = height / 2;
 
 //Fill window
-d3.select("#tree-container").style("height", "860px");
+d3.select("#tree-container").style("height", "870px");
 
 // Main update loop
 function update(source) {
@@ -80,7 +81,12 @@ function update(source) {
 
     // Normalize for fixed-depth.
     nodes.forEach(function (request_node) {
-    request_node.y = request_node.depth * 180;
+        if(flipGraph){
+            request_node.y = request_node.x
+            request_node.x = request_node.depth * 180;
+        }else{
+            request_node.y = request_node.depth * 180;
+        }
     });
 
     // Update the nodes…

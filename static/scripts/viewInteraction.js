@@ -6,6 +6,7 @@
 var hostnameLabel = document.getElementById("hostname");
 var graphPanel = document.getElementById("graphPanel");
 var requestPanel = document.getElementById("requestPanel");
+var toggleRequestPanel = document.getElementById("toggleRequestPanel");
 
 //Request context menu for collapsing/expanding, coloring, removing, and other edits
 var requestContextMenu = d3.select("#request-context-menu");
@@ -20,7 +21,7 @@ var colorMenu = document.getElementById("color-menu");
 var generalContextMenu = d3.select("#general-context-menu");
 var expandAll = document.getElementById("expandAll");
 var collapseAll = document.getElementById("collapseAll");
-var toggleRequestPanel = document.getElementById("toggleRequestPanel");
+var flipGraphBtn = document.getElementById("flipGraphBtn");
 var redact = document.getElementById("redactSensitiveInformation");
 var saveSVG = document.getElementById("saveSVG");
 var savePNG = document.getElementById("saveImage");
@@ -224,14 +225,17 @@ function removeAttributes(obj, attributesToRemove) {
 d3.select("body").on("contextmenu", function(){
     d3.event.preventDefault();                                   // Prevent the default right-click menu from appearing
     
-    var contextMenuWidth = 355;
-    var contextMenuHeight = 230;
+    var contextMenuWidth = 255;
+    var generalContextMenuHeight = 310;
+    var requestContextMenuHeight = 200;
 
     var maxX = window.innerWidth - contextMenuWidth;             // Calculate the maximum x and y coordinates to ensure the menu stays within the viewport
-    var maxY = window.innerHeight - contextMenuHeight;
+    var maxYGeneral = window.innerHeight - generalContextMenuHeight;
+    var maxYRequest = window.innerHeight - requestContextMenuHeight;
 
     var adjustedX = Math.min(absoluteMouseX, maxX);              // Calculate the adjusted x and y coordinates for the context menu
-    var adjustedY = Math.min(absoluteMouseY, maxY);
+    var adjustedYGeneral = Math.min(absoluteMouseY, maxYGeneral);
+    var adjustedYRequest = Math.min(absoluteMouseY, maxYRequest);
 
     var target = d3.event.target;
 
@@ -242,20 +246,20 @@ d3.select("body").on("contextmenu", function(){
         generalContextMenu.style("display","none");                                     // Show the vulnerability context menu at the mouse coordinates
         requestContextMenu.style("display","none");
         vulnContextMenu.style("left", adjustedX  + "px")
-        .style("top", adjustedY  + "px")
+        .style("top", adjustedYRequest  + "px")
         .style("display", "block");
         selectedVuln = target;
     }else if(requestSelected || (absoluteMouseX> pixels && selectedRequest) && fullscreen ==0){                                                               
         generalContextMenu.style("display","none");                                     // Show the request context menu at the mouse coordinates
         vulnContextMenu.style("display","none");
         requestContextMenu.style("left", adjustedX  + "px")
-        .style("top", adjustedY  + "px")
+        .style("top", adjustedYRequest  + "px")
         .style("display", "block");
     }else{
         requestContextMenu.style("display","none");                                      // Show the general context menu at the mouse coordinates
         vulnContextMenu.style("display","none");    
         generalContextMenu.style("left", adjustedX  + "px")
-        .style("top", adjustedY + "px")
+        .style("top", adjustedYGeneral + "px")
         .style("display", "block");
     }
     requestSelected = false;
@@ -324,6 +328,7 @@ removeRequest.addEventListener("click", function() {
     document.getElementById('parameterLabel').innerText = "";
     document.getElementById('contentLabel').innerText = "";
     vulns.style.display = "none";
+    selectedRequest = null;
 });
 
 // Vulnerability context menu add button
@@ -426,6 +431,16 @@ collapseAll.addEventListener("click", function() {
     collapseExpanded(graphRoot)
 });
 
+//Flips the x and y axis of the graph. Can be better for taking pictures and placing them in notes.
+flipGraphBtn.addEventListener("click", function(){
+    if(flipGraph==true){
+        flipGraph=false;
+    }else{
+        flipGraph=true;
+    }
+    update(graphRoot);
+})
+
 //Hide_show request panel
 toggleRequestPanel.addEventListener("click", function() {
     if(fullscreen == 0){
@@ -483,9 +498,15 @@ savePNG.addEventListener("click", function() {
     img.onload = function() {    // When the image has loaded, draw it onto the canvas
         var zoom = zm.scale();                          //Get zoom amount and scale image inversely
         var scale = 1/zoom;
-
-        canvas.width = (img.width+1300)*scale;          // Set canvas dimensions to match image dimensions
-        canvas.height = (img.height+700)*scale;
+        var width;
+        var height = 1200;
+        if(fullscreen){
+            width = 2600;
+        }else{
+            width = 2100;
+        }
+        canvas.width = (img.width+width)*scale;          // Set canvas dimensions to match image dimensions
+        canvas.height = (img.height+height)*scale;
 
         context.scale(scale, scale);
         context.drawImage(img, 0, 0);        // Draw the image onto the canvas

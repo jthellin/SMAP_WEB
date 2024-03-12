@@ -431,7 +431,7 @@ collapseAll.addEventListener("click", function() {
     collapseExpanded(graphRoot)
 });
 
-//Flips the x and y axis of the graph. Can be better for taking pictures and placing them in notes.
+//Flips the x and y axis of the graph. Can be better for saving PNGs/SVGs and placing them in notes.
 flipGraphBtn.addEventListener("click", function(){
     if(flipGraph==true){
         flipGraph=false;

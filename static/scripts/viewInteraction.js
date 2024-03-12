@@ -465,13 +465,29 @@ d3.select(document).on("mousemove", function() {
     absoluteMouseY = d3.event.pageY;
 });
 
+function round(num) {
+	return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
+//Removing white space around SVGs https://codepen.io/mkmllr/pen/vpJmEK
+function svgRemoveWhitespace(svg) {
+	let box = svg.getBBox();
+    viewBox = [round(box.x),round(box.y),round(box.width),round(box.height)].join(' ');
+	
+    let copiedSvg = svg.cloneNode(true);
+    copiedSvg.setAttribute('viewBox', viewBox);
+	return copiedSvg;
+}
+
 // Save as SVG 
 saveSVG.addEventListener("click", function() {
-    var svg = document.getElementById("tree-container")
+    var svg = document.getElementById("tree-container");
     svg.style.fontSize = "10px";
     svg.style.backgroundColor = '#eeeeee';
 
-    var svgXml = new XMLSerializer().serializeToString(svg);    // Serialize the SVG to XML string
+    var cropped = svgRemoveWhitespace(svg);
+
+    var svgXml = new XMLSerializer().serializeToString(cropped);    // Serialize the SVG to XML string
     var svgDataUri = 'data:image/svg+xml;base64,' + btoa(svgXml);    // Create a data URI for the SVG
 
     var downloadLink = document.createElement('a');    // Create a link element

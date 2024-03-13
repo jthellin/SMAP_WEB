@@ -429,6 +429,16 @@ collapseAll.addEventListener("click", function() {
             expand_or_collapse(node); 
         }
     }
+    document.getElementById('selectedRequest').innerText = "";          //Remove info from request panel
+    document.getElementById('selectedRequest').style.border = "none"
+    document.getElementById('notesLabel').innerText = "";
+    document.getElementById('notes').style.display = "none";
+    document.getElementById('notes').value  = "";
+    document.getElementById('content_type').innerText = "";
+    document.getElementById('selectedParams').innerText = "";
+    document.getElementById('parameterLabel').innerText = "";
+    document.getElementById('contentLabel').innerText = "";
+    vulns.style.display = "none";
     collapseExpanded(graphRoot)
 });
 

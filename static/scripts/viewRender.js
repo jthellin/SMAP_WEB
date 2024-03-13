@@ -54,7 +54,9 @@ rectW = 130,
 rectH = 30;
 
 var tree = d3.layout.tree().nodeSize([rectW+10, rectH+10]);
-var diagonal = d3.svg.diagonal().projection(function (d) {return [d.x + rectW / 2, d.y + rectH / 2];});
+var diagonal = d3.svg.diagonal().projection(function (d) {
+        return [d.x + rectW / 2, d.y + rectH / 2];  //Make lines connect to top of node and come from bottom of node
+});
 var nodes, links;
 
 // Attach to svg container with zoom behavior

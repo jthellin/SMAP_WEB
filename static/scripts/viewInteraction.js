@@ -328,6 +328,7 @@ removeRequest.addEventListener("click", function() {
     document.getElementById('parameterLabel').innerText = "";
     document.getElementById('contentLabel').innerText = "";
     vulns.style.display = "none";
+    update(selectedRequest);
     selectedRequest = null;
 });
 

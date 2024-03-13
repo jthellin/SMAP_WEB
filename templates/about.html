@@ -77,10 +77,10 @@
         <img src="{{ url_for('static', filename='/images/graphMenu.png') }}" style = "width:25vw;height: auto;" class = "aboutimage" >
     </div>
     <div class="aboutright">
-        Right click anywhere on the gray canvas to open the graph menu. Users can expand and collapse the entire graph from the root, remove all requests without parameters, redact hostnames
+        Right click anywhere on the gray canvas to open the graph menu. Users can expand and collapse the entire graph from the root, toggle between a vertical and horizontal view, remove all requests without parameters, redact hostnames
         and encoded requests, or save the graph as a PNG, an SVG, or a smap file. The current graph area will be captured when saved as a PNG allowing for more targeted views of the map. 
-        The entire map will be saved and cropped when saved as an SVG. Personally, I like to flip the map and save as an SVG to place the map in my notes. smap files retain any notes, 
-        vulnerabilities, or colors incorporated into the graph, allowing users to import the file into SMAP for later viewing. Note that requests without parameters can only be removed 
+        The entire map will be saved and cropped when saved as an SVG. It is recommended to save an SVG of a vertical map if you want to share the map or save it in your notes. smap files retain any notes, 
+        vulnerabilities, or colors incorporated into the graph, allowing users to import the file into SMAP for later viewing/editing. Note that requests without parameters can only be removed 
         if a Burp Suite site map was uploaded and performing this action will remove any edits made to the map. Redacted maps may be saved in any format and shared without worry of leaking any sensitive information.
     </div>
 </div>

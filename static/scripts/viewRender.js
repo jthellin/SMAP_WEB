@@ -55,7 +55,11 @@ rectH = 30;
 
 var tree = d3.layout.tree().nodeSize([rectW+10, rectH+10]);
 var diagonal = d3.svg.diagonal().projection(function (d) {
+    if(flipGraph){
+        return [d.y + rectW / 2, d.x + rectH / 2];  //Make lines connect to top of node and come from bottom of node
+    }else{
         return [d.x + rectW / 2, d.y + rectH / 2];  //Make lines connect to top of node and come from bottom of node
+    }
 });
 var nodes, links;
 
@@ -84,10 +88,9 @@ function update(source) {
     // Normalize for fixed-depth.
     nodes.forEach(function (request_node) {
         if(flipGraph){
-            request_node.y = request_node.x
-            request_node.x = request_node.depth * 300;
+            request_node.y = request_node.depth * 300;
         }else{
-            request_node.y = request_node.depth * 180;
+            request_node.y = request_node.depth * 150;
         }
     });
 
@@ -101,7 +104,11 @@ function update(source) {
     var nodeEnter = node.enter().append("g")
     .attr("class", "node")
     .attr("transform", function () {
-    return "translate(" + source.x0 + "," + source.y0 + ")";
+        if(flipGraph==true){
+            return "translate(" + source.y0 + "," + source.x0 + ")";
+        }else{
+            return "translate(" + source.x0 + "," + source.y0 + ")";
+        }
     })
     .on("click", function(request_node) {            // Update selected request on left click
         requestSelected = true;
@@ -192,7 +199,11 @@ function update(source) {
     var nodeUpdate = node.transition()
     .duration(duration)
     .attr("transform", function (request_node) {
-    return "translate(" + request_node.x + "," + request_node.y + ")";
+        if(flipGraph==true){
+            return "translate(" + request_node.y + "," + request_node.x + ")";
+        }else{
+            return "translate(" + request_node.x + "," + request_node.y + ")";
+        }
     });
 
     nodeUpdate.select("rect")                           // Update with current request colors

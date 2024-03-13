@@ -83,7 +83,7 @@ function update(source) {
     nodes.forEach(function (request_node) {
         if(flipGraph){
             request_node.y = request_node.x
-            request_node.x = request_node.depth * 200;
+            request_node.x = request_node.depth * 300;
         }else{
             request_node.y = request_node.depth * 180;
         }

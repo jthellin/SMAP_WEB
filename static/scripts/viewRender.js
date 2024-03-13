@@ -32,6 +32,7 @@ if(onlyParams == 1){
 }else{
     removeRequestsWithoutParams.style.display = "block";
 }
+//Global variables
 var selectedRequest;
 var requestSelected = false;
 var removingRequest = false;
@@ -56,7 +57,7 @@ rectH = 30;
 var tree = d3.layout.tree().nodeSize([rectW+10, rectH+10]);
 var diagonal = d3.svg.diagonal().projection(function (d) {
     if(flipGraph){
-        return [d.y + rectW / 2, d.x + rectH / 2];  //Make lines connect to top of node and come from bottom of node
+        return [d.y + rectW / 4, d.x + rectH / 2];  //Make lines connect to left of node and come from right of node
     }else{
         return [d.x + rectW / 2, d.y + rectH / 2];  //Make lines connect to top of node and come from bottom of node
     }
@@ -88,9 +89,9 @@ function update(source) {
     // Normalize for fixed-depth.
     nodes.forEach(function (request_node) {
         if(flipGraph){
-            request_node.y = request_node.depth * 300;
+            request_node.y = request_node.depth * 350;          // Nodes have more horizontal space when tree is flipped
         }else{
-            request_node.y = request_node.depth * 150;
+            request_node.y = request_node.depth * 180;
         }
     });
 
@@ -311,7 +312,11 @@ function update(source) {
         }
     })
     .attr("transform", function () {
-        return "translate(" + source.x + "," + source.y + ")";
+        if(flipGraph){
+            return "translate(" + source.y + "," + source.x + ")";
+        }else{
+            return "translate(" + source.x + "," + source.y + ")";
+        }
     })
     .remove();
 

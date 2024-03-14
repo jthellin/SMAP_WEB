@@ -49,7 +49,6 @@ def createRequestList(file_contents, filename):
         requestList = SiteMapperFunctions.removeRequestsWithoutParameters(requestList)
 
     # Remove duplicate requests
-    print("\nRemoving duplicate requests...\n")
     requestList = SiteMapperFunctions.removeDuplicates(requestList)
 
     # Check for POST/OPTIONS requests on the same level as GET requests.

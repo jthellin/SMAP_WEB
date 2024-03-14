@@ -166,10 +166,10 @@ function loadVulns(selectedRequest){
         var tempContainer = document.createElement('div');   // Convert the HTML string to DOM elements
         tempContainer.innerHTML = newFindingHTML;
         var newFinding = tempContainer.firstChild;           // Get the newly created finding element
+        newFinding.lastChild.previousSibling.value = f;      //Set title of vuln
 
         vulnContainer.appendChild(newFinding);              //  Append the newly created vulnerability to vulnContainer
         attachColor()                                       // Update selection color based on current severity
-        document.getElementById("finding").value = f;
     })
 }
 
